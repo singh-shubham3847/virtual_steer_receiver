@@ -1,0 +1,14 @@
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\Tests\bin\Debug\net8.0\VirtualSteerReceiver.Tests.exe
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\Tests\bin\Debug\net8.0\VirtualSteerReceiver.Tests.deps.json
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\Tests\bin\Debug\net8.0\VirtualSteerReceiver.Tests.runtimeconfig.json
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\Tests\bin\Debug\net8.0\VirtualSteerReceiver.Tests.dll
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\Tests\bin\Debug\net8.0\VirtualSteerReceiver.Tests.pdb
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\Tests\obj\Debug\net8.0\VirtualSteerReceiver.Tests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\Tests\obj\Debug\net8.0\VirtualSteerReceiver.Tests.AssemblyInfoInputs.cache
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\Tests\obj\Debug\net8.0\VirtualSteerReceiver.Tests.AssemblyInfo.cs
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\Tests\obj\Debug\net8.0\VirtualSteerReceiver.Tests.csproj.CoreCompileInputs.cache
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\Tests\obj\Debug\net8.0\VirtualSteerReceiver.Tests.dll
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\Tests\obj\Debug\net8.0\refint\VirtualSteerReceiver.Tests.dll
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\Tests\obj\Debug\net8.0\VirtualSteerReceiver.Tests.pdb
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\Tests\obj\Debug\net8.0\VirtualSteerReceiver.Tests.genruntimeconfig.cache
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\Tests\obj\Debug\net8.0\ref\VirtualSteerReceiver.Tests.dll

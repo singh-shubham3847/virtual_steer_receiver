@@ -1,0 +1,17 @@
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\bin\Debug\net8.0\InspectViGem.exe
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\bin\Debug\net8.0\InspectViGem.deps.json
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\bin\Debug\net8.0\InspectViGem.runtimeconfig.json
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\bin\Debug\net8.0\InspectViGem.dll
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\bin\Debug\net8.0\InspectViGem.pdb
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\bin\Debug\net8.0\Nefarius.ViGEm.Client.dll
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\obj\Debug\net8.0\InspectViGem.csproj.AssemblyReference.cache
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\obj\Debug\net8.0\InspectViGem.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\obj\Debug\net8.0\InspectViGem.AssemblyInfoInputs.cache
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\obj\Debug\net8.0\InspectViGem.AssemblyInfo.cs
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\obj\Debug\net8.0\InspectViGem.csproj.CoreCompileInputs.cache
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\obj\Debug\net8.0\InspectV.5D60F476.Up2Date
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\obj\Debug\net8.0\InspectViGem.dll
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\obj\Debug\net8.0\refint\InspectViGem.dll
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\obj\Debug\net8.0\InspectViGem.pdb
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\obj\Debug\net8.0\InspectViGem.genruntimeconfig.cache
+C:\Users\Shubham\.gemini\antigravity\scratch\VirtualSteerReceiver\TempViGemInspect\obj\Debug\net8.0\ref\InspectViGem.dll

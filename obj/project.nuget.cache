@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "Fe6yMfsgbGs=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Shubham\\.gemini\\antigravity\\scratch\\VirtualSteerReceiver\\VirtualSteerReceiver.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Shubham\\.nuget\\packages\\nefarius.vigem.client\\1.21.256\\nefarius.vigem.client.1.21.256.nupkg.sha512",
+    "C:\\Users\\Shubham\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.18\\microsoft.netcore.app.ref.8.0.18.nupkg.sha512",
+    "C:\\Users\\Shubham\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.18\\microsoft.windowsdesktop.app.ref.8.0.18.nupkg.sha512",
+    "C:\\Users\\Shubham\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.18\\microsoft.aspnetcore.app.ref.8.0.18.nupkg.sha512",
+    "C:\\Users\\Shubham\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.18\\microsoft.netcore.app.host.win-x64.8.0.18.nupkg.sha512"
+  ],
+  "logs": []
+}
