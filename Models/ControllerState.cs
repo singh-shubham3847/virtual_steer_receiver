@@ -15,6 +15,13 @@ namespace VirtualSteerReceiver.Models
         public bool Horn { get; init; }
         public bool Camera { get; init; }
         public bool Headlights { get; init; }
+        public bool DpadUp { get; init; }
+        public bool DpadDown { get; init; }
+        public bool DpadLeft { get; init; }
+        public bool DpadRight { get; init; }
+        public bool LB { get; init; }
+        public bool RB { get; init; }
+        public bool Back { get; init; }
         public ushort SequenceNumber { get; init; }
         public DateTime Timestamp { get; init; } = DateTime.UtcNow;
 

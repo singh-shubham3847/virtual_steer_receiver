@@ -18,6 +18,7 @@
 
     <Window.Resources>
         <!-- Custom Styles & Brushes -->
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <SolidColorBrush x:Key="CardBackground" Color="#1E293B" />
         <SolidColorBrush x:Key="CardBorder" Color="#334155" />
         <SolidColorBrush x:Key="AccentBlue" Color="#3B82F6" />
@@ -52,7 +53,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="180" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- TOP BAR / HEADER -->
@@ -125,6 +126,23 @@
                         </Button.Template>
                     </Button>
 
+                    <!-- Toggle Diagnostics Button -->
+                    <Button Command="{Binding ToggleDiagnosticsCommand}" Padding="12,8" Margin="0,0,16,0" BorderThickness="0" Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="diagBorder" Background="#475569" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                                    <TextBlock x:Name="diagText" Text="📊 Show Diagnostics" Foreground="White" FontWeight="SemiBold" FontSize="12" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding ShowDiagnostics}" Value="True">
+                                        <Setter TargetName="diagBorder" Property="Background" Value="#2563EB" />
+                                        <Setter TargetName="diagText" Property="Text" Value="📊 Hide Diagnostics" />
+                                    </DataTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
                     <!-- Connection Status Badge -->
                     <Border CornerRadius="20" Padding="14,6" Background="{Binding ConnectionStatusBrush}">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -172,8 +190,8 @@
         <!-- MIDDLE CONTENT: DASHBOARD GRID -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2.8*" />
-                <ColumnDefinition Width="3.2*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <!-- LEFT PANEL: CONTROLLER INPUT GAUGES -->
@@ -262,7 +280,7 @@
                 <Border Grid.Row="1" Style="{StaticResource CardStyle}">
                     <StackPanel>
                         <TextBlock Text="BUTTON STATES" Style="{StaticResource HeaderLabel}" Margin="0,0,0,10" />
-                        <UniformGrid Columns="4" Rows="2">
+                        <UniformGrid Columns="4">
 
                             <!-- HANDBRAKE -->
                             <Border Margin="3" Padding="8" Background="#0F172A" CornerRadius="6">
@@ -397,13 +415,146 @@
                                 </StackPanel>
                             </Border>
 
+                            <!-- DPAD UP -->
+                            <Border Margin="3" Padding="8" Background="#0F172A" CornerRadius="6">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="Dpad Up" Foreground="#94A3B8" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding DpadUpText}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,3,0,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="#64748B" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DpadUp}" Value="True">
+                                                        <Setter Property="Foreground" Value="#38BDF8" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- DPAD DOWN -->
+                            <Border Margin="3" Padding="8" Background="#0F172A" CornerRadius="6">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="Dpad Down" Foreground="#94A3B8" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding DpadDownText}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,3,0,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="#64748B" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DpadDown}" Value="True">
+                                                        <Setter Property="Foreground" Value="#38BDF8" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- DPAD LEFT -->
+                            <Border Margin="3" Padding="8" Background="#0F172A" CornerRadius="6">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="Dpad Left" Foreground="#94A3B8" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding DpadLeftText}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,3,0,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="#64748B" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DpadLeft}" Value="True">
+                                                        <Setter Property="Foreground" Value="#38BDF8" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- DPAD RIGHT -->
+                            <Border Margin="3" Padding="8" Background="#0F172A" CornerRadius="6">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="Dpad Right" Foreground="#94A3B8" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding DpadRightText}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,3,0,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="#64748B" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DpadRight}" Value="True">
+                                                        <Setter Property="Foreground" Value="#38BDF8" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- BOOST (LB) -->
+                            <Border Margin="3" Padding="8" Background="#0F172A" CornerRadius="6">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="Boost (LB)" Foreground="#94A3B8" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding LBText}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,3,0,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="#64748B" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding LB}" Value="True">
+                                                        <Setter Property="Foreground" Value="#10B981" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- REAR VIEW (RB) -->
+                            <Border Margin="3" Padding="8" Background="#0F172A" CornerRadius="6">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="Rear View (RB)" Foreground="#94A3B8" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding RBText}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,3,0,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="#64748B" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RB}" Value="True">
+                                                        <Setter Property="Foreground" Value="#10B981" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- RESET (BACK) -->
+                            <Border Margin="3" Padding="8" Background="#0F172A" CornerRadius="6">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="Reset (Back)" Foreground="#94A3B8" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding BackText}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,3,0,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="#64748B" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Back}" Value="True">
+                                                        <Setter Property="Foreground" Value="#EF4444" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+
                         </UniformGrid>
                     </StackPanel>
                 </Border>
             </Grid>
 
             <!-- RIGHT PANEL: ADVANCED NETWORK DIAGNOSTICS GRID -->
-            <Border Grid.Column="1" Style="{StaticResource CardStyle}">
+            <Border Grid.Column="1" Style="{StaticResource CardStyle}" Width="540" Visibility="{Binding ShowDiagnostics, Converter={StaticResource BoolToVis}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -540,7 +691,7 @@
         </Grid>
 
         <!-- BOTTOM CONSOLE: LOG FEED -->
-        <Border Grid.Row="3" Style="{StaticResource CardStyle}">
+        <Border Grid.Row="3" Style="{StaticResource CardStyle}" Height="180" Visibility="{Binding ShowDiagnostics, Converter={StaticResource BoolToVis}}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />

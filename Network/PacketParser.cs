@@ -56,7 +56,7 @@ namespace VirtualSteerReceiver.Network
             float throttle = BitConverter.ToSingle(buffer.Slice(8, 4));
             float brake = BitConverter.ToSingle(buffer.Slice(12, 4));
             float clutch = BitConverter.ToSingle(buffer.Slice(16, 4));
-            byte buttonsRaw = buffer[20];
+            ushort buttonsRaw = BitConverter.ToUInt16(buffer.Slice(20, 2));
 
             var buttons = (Protocol.ButtonFlags)buttonsRaw;
 
@@ -74,6 +74,13 @@ namespace VirtualSteerReceiver.Network
                 Horn = buttons.HasFlag(Protocol.ButtonFlags.Horn),
                 Camera = buttons.HasFlag(Protocol.ButtonFlags.Camera),
                 Headlights = buttons.HasFlag(Protocol.ButtonFlags.Headlights),
+                DpadUp = buttons.HasFlag(Protocol.ButtonFlags.DpadUp),
+                DpadDown = buttons.HasFlag(Protocol.ButtonFlags.DpadDown),
+                DpadLeft = buttons.HasFlag(Protocol.ButtonFlags.DpadLeft),
+                DpadRight = buttons.HasFlag(Protocol.ButtonFlags.DpadRight),
+                LB = buttons.HasFlag(Protocol.ButtonFlags.LB),
+                RB = buttons.HasFlag(Protocol.ButtonFlags.RB),
+                Back = buttons.HasFlag(Protocol.ButtonFlags.Back),
                 Timestamp = DateTime.UtcNow
             };
 

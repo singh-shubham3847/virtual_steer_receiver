@@ -59,10 +59,18 @@ namespace VirtualSteerReceiver.ViewModels
         private bool _horn;
         private bool _camera;
         private bool _headlights;
+        private bool _dpadUp;
+        private bool _dpadDown;
+        private bool _dpadLeft;
+        private bool _dpadRight;
+        private bool _lb;
+        private bool _rb;
+        private bool _back;
 
         // 100 Hz Test Simulator Stream
         private bool _isTestStreamRunning;
         private CancellationTokenSource? _testStreamCts;
+        private bool _showDiagnostics;
 
         public MainViewModel()
         {
@@ -75,6 +83,7 @@ namespace VirtualSteerReceiver.ViewModels
             ToggleListenCommand = new RelayCommand(ToggleListen);
             ClearLogsCommand = new RelayCommand(ClearLogs);
             ToggleTestStreamCommand = new RelayCommand(ToggleTestStream);
+            ToggleDiagnosticsCommand = new RelayCommand(ToggleDiagnostics);
 
             DetectLocalIpAddress();
 
@@ -85,6 +94,13 @@ namespace VirtualSteerReceiver.ViewModels
         public ICommand ToggleListenCommand { get; }
         public ICommand ClearLogsCommand { get; }
         public ICommand ToggleTestStreamCommand { get; }
+        public ICommand ToggleDiagnosticsCommand { get; }
+
+        public bool ShowDiagnostics
+        {
+            get => _showDiagnostics;
+            set => SetProperty(ref _showDiagnostics, value);
+        }
 
         public ObservableCollection<LogEntry> Logs { get; } = new ObservableCollection<LogEntry>();
 
@@ -398,6 +414,55 @@ namespace VirtualSteerReceiver.ViewModels
         }
         public string HeadlightsText => Headlights ? "ON" : "OFF";
 
+        public bool DpadUp
+        {
+            get => _dpadUp;
+            private set { if (SetProperty(ref _dpadUp, value)) OnPropertyChanged(nameof(DpadUpText)); }
+        }
+        public string DpadUpText => DpadUp ? "ON" : "OFF";
+
+        public bool DpadDown
+        {
+            get => _dpadDown;
+            private set { if (SetProperty(ref _dpadDown, value)) OnPropertyChanged(nameof(DpadDownText)); }
+        }
+        public string DpadDownText => DpadDown ? "ON" : "OFF";
+
+        public bool DpadLeft
+        {
+            get => _dpadLeft;
+            private set { if (SetProperty(ref _dpadLeft, value)) OnPropertyChanged(nameof(DpadLeftText)); }
+        }
+        public string DpadLeftText => DpadLeft ? "ON" : "OFF";
+
+        public bool DpadRight
+        {
+            get => _dpadRight;
+            private set { if (SetProperty(ref _dpadRight, value)) OnPropertyChanged(nameof(DpadRightText)); }
+        }
+        public string DpadRightText => DpadRight ? "ON" : "OFF";
+
+        public bool LB
+        {
+            get => _lb;
+            private set { if (SetProperty(ref _lb, value)) OnPropertyChanged(nameof(LBText)); }
+        }
+        public string LBText => LB ? "ON" : "OFF";
+
+        public bool RB
+        {
+            get => _rb;
+            private set { if (SetProperty(ref _rb, value)) OnPropertyChanged(nameof(RBText)); }
+        }
+        public string RBText => RB ? "ON" : "OFF";
+
+        public bool Back
+        {
+            get => _back;
+            private set { if (SetProperty(ref _back, value)) OnPropertyChanged(nameof(BackText)); }
+        }
+        public string BackText => Back ? "ON" : "OFF";
+
         private void DetectLocalIpAddress()
         {
             try
@@ -442,6 +507,13 @@ namespace VirtualSteerReceiver.ViewModels
                 Horn = state.Horn;
                 Camera = state.Camera;
                 Headlights = state.Headlights;
+                DpadUp = state.DpadUp;
+                DpadDown = state.DpadDown;
+                DpadLeft = state.DpadLeft;
+                DpadRight = state.DpadRight;
+                LB = state.LB;
+                RB = state.RB;
+                Back = state.Back;
             });
         }
 
@@ -521,6 +593,11 @@ namespace VirtualSteerReceiver.ViewModels
         private void ClearLogs()
         {
             Logs.Clear();
+        }
+
+        private void ToggleDiagnostics()
+        {
+            ShowDiagnostics = !ShowDiagnostics;
         }
 
         private void ToggleTestStream()

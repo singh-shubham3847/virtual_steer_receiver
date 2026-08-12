@@ -1,0 +1,27 @@
+# C# / .NET / WPF build outputs
+[Bb]in/
+[Oo]bj/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+.idea/
+
+# Android build outputs
+virtual_steer/.gradle/
+virtual_steer/build/
+virtual_steer/app/build/
+virtual_steer/local.properties
+virtual_steer/.cxx/
+virtual_steer/*.apk
+virtual_steer/*.aar
+virtual_steer/app/build/outputs/apk/debug/app-debug.apk
+virtual_steer/app/build/outputs/apk/release/app-release-unsigned.apk
+
+# Installer script build output
+Output/
+
+# OS files
+.DS_Store
+Thumbs.db

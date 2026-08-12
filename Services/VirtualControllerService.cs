@@ -108,6 +108,13 @@ namespace VirtualSteerReceiver.Services
                 _controller.SetButtonState(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.Y, state.Horn);
                 _controller.SetButtonState(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.RightThumb, state.Camera);
                 _controller.SetButtonState(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.LeftThumb, state.Headlights);
+                _controller.SetButtonState(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.Up, state.DpadUp);
+                _controller.SetButtonState(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.Down, state.DpadDown);
+                _controller.SetButtonState(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.Left, state.DpadLeft);
+                _controller.SetButtonState(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.Right, state.DpadRight);
+                _controller.SetButtonState(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.LeftShoulder, state.LB);
+                _controller.SetButtonState(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.RightShoulder, state.RB);
+                _controller.SetButtonState(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.Back, state.Back);
 
                 _controller.SubmitReport();
             }

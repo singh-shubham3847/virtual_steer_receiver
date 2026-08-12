@@ -11,16 +11,23 @@ namespace VirtualSteerReceiver.Network
         public const int DiscoveryPort = 4445;
 
         [Flags]
-        public enum ButtonFlags : byte
+        public enum ButtonFlags : ushort
         {
-            None      = 0,
-            Handbrake = 1 << 0,
-            GearUp    = 1 << 1,
-            GearDown  = 1 << 2,
-            Pause     = 1 << 3,
-            Horn      = 1 << 4,
-            Camera    = 1 << 5,
-            Headlights = 1 << 6
+            None       = 0,
+            Handbrake  = 1 << 0,
+            GearUp     = 1 << 1,
+            GearDown   = 1 << 2,
+            Pause      = 1 << 3,
+            Horn       = 1 << 4,
+            Camera     = 1 << 5,
+            Headlights = 1 << 6,
+            DpadUp     = 1 << 7,
+            DpadDown   = 1 << 8,
+            DpadLeft   = 1 << 9,
+            DpadRight  = 1 << 10,
+            LB         = 1 << 11,
+            RB         = 1 << 12,
+            Back       = 1 << 13
         }
 
         public static ushort CalculateCrc16(ReadOnlySpan<byte> buffer)
