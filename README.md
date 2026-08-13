@@ -5,16 +5,6 @@ Virtual Steer is an ultra-low latency, high-precision virtual steering wheel con
 ---
 ## ⚡ Key Features
 
-### 📱 Android Companion App
-* **🎮 Drag-and-Drop Layout Editor:** Configure the position of driving HUD buttons (`Pause`, `Cam`, `Lights`, `GEAR-`, `HBRAKE`, `GEAR+`, and `📻 RADIO`) on screen dynamically.
-* **📐 Gyro & Accelerometer Support:** Uses precise **Rotation Vector** tracking by default, with automatic **Accelerometer (gravity tilt)** fallback for devices lacking a gyroscope.
-* **🔋 Live Battery Tracking:** Feeds real-time phone battery statistics directly to the dashboards.
-* **⚙️ Deep Customization:** Sliders for steering sensitivity, max rotation limits (135° default), pedal deadzones, and input smoothing.
-* **📡 Auto-Discovery:** Instant PC discovery over local Wi-Fi or Android Hotspot.
-* **🔌 Wired USB Connection (Tethering):** Cuts ping response latency to <1ms and guarantees zero packet loss. Includes a direct shortcut in the Pairing/Settings menu to launch the system Tethering settings in one tap.
-
----
-
 ### 💻 Windows WPF Companion Receiver
 * **📊 Live Gauges Dashboard:** High-fidelity overview panel displaying connection duration, latency, packet rates, and animated gauges for Steering, Throttle, and Brake.
 * **📈 Real-Time Graphing:** Canvas-drawn polyline graphs plotting Steering, Throttle, Brake, Latency, and Jitter over the last 300 packets.
@@ -78,14 +68,6 @@ Telemetry and control signals are packed into a compact, fixed **24-byte binary 
 ---
 
 ## 🛠️ Build from Source
-
-### Android App Build
-Navigate to `virtual_steer/` and build via Gradle:
-```cmd
-cd virtual_steer
-.\gradlew.bat assembleDebug
-```
-For more building options, see the [Android Build Readme](file:///C:/Users/Shubham/.gemini/antigravity/scratch/VirtualSteerReceiver/virtual_steer/README.md).
 
 ### WPF Receiver Build
 Open `VirtualSteerReceiver.sln` in Visual Studio 2022 and compile, or build via the .NET CLI:
