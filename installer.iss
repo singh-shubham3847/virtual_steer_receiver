@@ -12,15 +12,11 @@ OutputBaseFilename=VirtualSteerSetup
 Compression=lzma
 SolidCompression=yes
 UninstallDisplayIcon={app}\VirtualSteerReceiver.exe
-SetupIconFile=App.ico
+; SetupIconFile=App.ico
 
 [Files]
-Source: "bin\Release\net8.0-windows\win-x64\publish\VirtualSteerReceiver.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\net8.0-windows\win-x64\publish\D3DCompiler_47_cor3.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\net8.0-windows\win-x64\publish\PenImc_cor3.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\net8.0-windows\win-x64\publish\PresentationNative_cor3.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\net8.0-windows\win-x64\publish\vcruntime140_cor3.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\net8.0-windows\win-x64\publish\wpfgfx_cor3.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\Release\net8.0-windows\win-x64\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
 
 [Icons]
 Name: "{group}\Virtual Steer Companion"; Filename: "{app}\VirtualSteerReceiver.exe"
