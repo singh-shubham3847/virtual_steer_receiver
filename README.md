@@ -3,15 +3,6 @@
 Virtual Steer is an ultra-low latency, high-precision virtual steering wheel controller system. It turns your Android smartphone into a wireless racing wheel using built-in motion sensors and streams control data over UDP to a WPF Windows companion application. The receiver emulates a physical Xbox 360 controller via the **ViGEmBus** driver, feeding inputs directly into any PC racing game (Forza, Assetto Corsa, F1, GTA V, etc.).
 
 ---
-
-## 🛠️ Project Structure
-
-The repository contains both components of the ecosystem:
-* **Root Directory (`/`):** [Windows WPF Companion Receiver App](file:///C:/Users/Shubham/.gemini/antigravity/scratch/VirtualSteerReceiver)
-* **Android Directory ([`/virtual_steer`](file:///C:/Users/Shubham/.gemini/antigravity/scratch/VirtualSteerReceiver/virtual_steer)):** Kotlin Jetpack Compose Android Mobile App
-
----
-
 ## ⚡ Key Features
 
 ### 📱 Android Companion App
