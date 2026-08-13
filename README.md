@@ -20,6 +20,9 @@ The repository contains both components of the ecosystem:
 * **🔋 Live Battery Tracking:** Feeds real-time phone battery statistics directly to the dashboards.
 * **⚙️ Deep Customization:** Sliders for steering sensitivity, max rotation limits (135° default), pedal deadzones, and input smoothing.
 * **📡 Auto-Discovery:** Instant PC discovery over local Wi-Fi or Android Hotspot.
+* **🔌 Wired USB Connection (Tethering):** Cuts ping response latency to <1ms and guarantees zero packet loss. Includes a direct shortcut in the Pairing/Settings menu to launch the system Tethering settings in one tap.
+
+---
 
 ### 💻 Windows WPF Companion Receiver
 * **📊 Live Gauges Dashboard:** High-fidelity overview panel displaying connection duration, latency, packet rates, and animated gauges for Steering, Throttle, and Brake.
