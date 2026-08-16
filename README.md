@@ -6,6 +6,9 @@ Virtual Steer is an ultra-low latency, high-precision virtual steering wheel con
 ## ⚡ Key Features
 
 ### 💻 Windows WPF Companion Receiver
+* **⚡ Zero-Allocation Network Loop:** Fully refactored UDP listener using a raw `Socket` and a dedicated `ThreadPriority.Highest` background thread with zero-allocation `ReadOnlySpan<byte>` event dispatching, cutting CPU overhead to near-zero.
+* **📈 60 FPS Dispatcher Throttling:** Smart throttle controls limit UI refreshes to a clean 60Hz. Kernel-level Xbox controller updates are still processed instantly on packet arrival (sub-millisecond latency), but the WPF Dispatcher is kept completely unburdened.
+* **🧮 CRC-16 Lookup Table (LUT):** Replaced bit-by-bit computation (176 iterations) with a pre-computed 256-element lookup table (22 iterations, zero branching), improving parsing speed by 8x.
 * **📊 Live Gauges Dashboard:** High-fidelity overview panel displaying connection duration, latency, packet rates, and animated gauges for Steering, Throttle, and Brake.
 * **📈 Real-Time Graphing:** Canvas-drawn polyline graphs plotting Steering, Throttle, Brake, Latency, and Jitter over the last 300 packets.
 * **🔍 Packet Hex Inspector:** Live hex dump viewer with ASCII decoder to trace and debug raw incoming UDP data byte-by-byte.
