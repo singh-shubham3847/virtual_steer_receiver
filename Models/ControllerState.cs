@@ -2,7 +2,11 @@ using System;
 
 namespace VirtualSteerReceiver.Models
 {
-    public sealed record ControllerState
+    /// <summary>
+    /// Represents the controller input state.
+    /// Defined as a readonly struct to prevent heap allocations on high-frequency packet processing.
+    /// </summary>
+    public readonly struct ControllerState
     {
         public float Steering { get; init; }
         public float Throttle { get; init; }
@@ -23,7 +27,7 @@ namespace VirtualSteerReceiver.Models
         public bool RB { get; init; }
         public bool Back { get; init; }
         public ushort SequenceNumber { get; init; }
-        public DateTime Timestamp { get; init; } = DateTime.UtcNow;
+        public DateTime Timestamp { get; init; }
 
         public static ControllerState Empty { get; } = new ControllerState();
     }

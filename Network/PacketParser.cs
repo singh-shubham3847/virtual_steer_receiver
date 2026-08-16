@@ -15,9 +15,15 @@ namespace VirtualSteerReceiver.Network
     public readonly struct ParseResult
     {
         public ParseStatus Status { get; }
-        public ControllerState? State { get; }
+        public ControllerState State { get; }
 
-        public ParseResult(ParseStatus status, ControllerState? state = null)
+        public ParseResult(ParseStatus status)
+        {
+            Status = status;
+            State = default;
+        }
+
+        public ParseResult(ParseStatus status, ControllerState state)
         {
             Status = status;
             State = state;

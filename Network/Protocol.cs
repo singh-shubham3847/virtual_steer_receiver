@@ -30,38 +30,52 @@ namespace VirtualSteerReceiver.Network
             Back       = 1 << 13
         }
 
+        // Fast Lookup Table for CRC-16-CCITT (poly 0x1021)
+        private static readonly ushort[] CrcTable;
+
+        static Protocol()
+        {
+            CrcTable = new ushort[256];
+            for (int i = 0; i < 256; i++)
+            {
+                ushort value = (ushort)(i << 8);
+                for (int bit = 0; bit < 8; bit++)
+                {
+                    bool topBit = (value & 0x8000) != 0;
+                    value = (ushort)(value << 1);
+                    if (topBit)
+                    {
+                        value ^= 0x1021;
+                    }
+                }
+                CrcTable[i] = value;
+            }
+        }
+
+        /// <summary>
+        /// Fast Lookup-Table-based CRC-16 calculation.
+        /// </summary>
         public static ushort CalculateCrc16(ReadOnlySpan<byte> buffer)
         {
             ushort crc = 0x0000;
             for (int i = 0; i < buffer.Length; i++)
             {
-                byte value = buffer[i];
-                for (int bit = 0; bit < 8; bit++)
-                {
-                    bool inputBit = ((value >> (7 - bit)) & 1) == 1;
-                    bool topBit = ((crc >> 15) & 1) == 1;
-                    crc = (ushort)(crc << 1);
-                    if (topBit ^ inputBit)
-                    {
-                        crc ^= 0x1021;
-                    }
-                }
+                byte index = (byte)((crc >> 8) ^ buffer[i]);
+                crc = (ushort)((crc << 8) ^ CrcTable[index]);
             }
             return crc;
         }
 
+        /// <summary>
+        /// Fast Lookup-Table-based legacy CRC-16 calculation (init 0xFFFF).
+        /// </summary>
         public static ushort CalculateLegacyCrc16(ReadOnlySpan<byte> buffer)
         {
             ushort crc = 0xFFFF;
             for (int i = 0; i < buffer.Length; i++)
             {
-                crc ^= (ushort)(buffer[i] << 8);
-                for (int bit = 0; bit < 8; bit++)
-                {
-                    crc = (crc & 0x8000) != 0
-                        ? (ushort)((crc << 1) ^ 0x1021)
-                        : (ushort)(crc << 1);
-                }
+                byte index = (byte)((crc >> 8) ^ buffer[i]);
+                crc = (ushort)((crc << 8) ^ CrcTable[index]);
             }
             return crc;
         }

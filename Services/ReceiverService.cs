@@ -4,6 +4,7 @@ using System.Threading;
 using VirtualSteerReceiver.Models;
 using VirtualSteerReceiver.Network;
 using VirtualSteerReceiver.Utils;
+using System.Diagnostics;
 
 namespace VirtualSteerReceiver.Services
 {
@@ -64,7 +65,7 @@ namespace VirtualSteerReceiver.Services
         private long _crcFailuresCount;
         private long _reconnectCount;
 
-        private DateTime? _lastPacketTime;
+        private long? _lastPacketTicks;
         private double _currentPingMs;
         private double _maxPingMs;
         private double _minPingMs;
@@ -144,7 +145,7 @@ namespace VirtualSteerReceiver.Services
             _invalidPacketsCount = 0;
             _crcFailuresCount = 0;
             _reconnectCount = 0;
-            _lastPacketTime = null;
+            _lastPacketTicks = null;
             _currentPingMs = 0;
             _maxPingMs = 0;
             _minPingMs = 0;
@@ -154,29 +155,36 @@ namespace VirtualSteerReceiver.Services
             _previousPingMs = 0;
             _jitterMs = 0;
             _isConnected = false;
+            _lastPacketTicks = null;
+            _lastTelemetryPublishTime = DateTime.MinValue;
             _sourceIp = "Disconnected";
             _lastRawPacket = null;
-            _lastTelemetryPublishTime = DateTime.MinValue;
         }
 
-        private void OnRawPacketReceived(byte[] data, IPEndPoint sender)
+        private void OnRawPacketReceived(ReadOnlySpan<byte> data, IPEndPoint sender)
         {
-            DateTime now = DateTime.UtcNow;
+            long nowTicks = Stopwatch.GetTimestamp();
             _bytesThisSecond += data.Length;
-            _lastRawPacket = data;
+
+            DateTime now = DateTime.UtcNow;
+            bool shouldPublishTelemetry = (now - _lastTelemetryPublishTime).TotalMilliseconds >= 50;
+            if (shouldPublishTelemetry)
+            {
+                _lastRawPacket = data.ToArray();
+            }
 
             ParseResult result = PacketParser.Parse(data);
 
-            if (result.Status == ParseStatus.Success && result.State != null)
+            if (result.Status == ParseStatus.Success)
             {
                 var state = result.State;
                 _totalPackets++;
                 _packetsThisSecond++;
 
-                // Ping & Jitter calculation (inter-packet arrival time)
-                if (_lastPacketTime.HasValue)
+                // Ping & Jitter calculation (inter-packet arrival time) using high-precision Stopwatch ticks
+                if (_lastPacketTicks.HasValue)
                 {
-                    double currentPing = (now - _lastPacketTime.Value).TotalMilliseconds;
+                    double currentPing = (double)(nowTicks - _lastPacketTicks.Value) * 1000 / Stopwatch.Frequency;
                     _currentPingMs = currentPing;
 
                     if (_minPingMs == 0 || currentPing < _minPingMs) _minPingMs = currentPing;
@@ -194,7 +202,7 @@ namespace VirtualSteerReceiver.Services
                     _previousPingMs = currentPing;
                 }
 
-                _lastPacketTime = now;
+                _lastPacketTicks = nowTicks;
                 _sourceIp = sender.ToString();
 
                 // Sequence & Packet Loss calculation
@@ -238,7 +246,7 @@ namespace VirtualSteerReceiver.Services
                 // Fire events
                 ControllerStateUpdated?.Invoke(state);
 
-                if ((now - _lastTelemetryPublishTime).TotalMilliseconds >= 50)
+                if (shouldPublishTelemetry)
                 {
                     _lastTelemetryPublishTime = now;
                     PublishTelemetry();
@@ -257,7 +265,7 @@ namespace VirtualSteerReceiver.Services
                     Logger.Instance.Warn($"❌ Invalid packet ({result.Status}) — discarded");
                 }
 
-                if ((now - _lastTelemetryPublishTime).TotalMilliseconds >= 50)
+                if (shouldPublishTelemetry)
                 {
                     _lastTelemetryPublishTime = now;
                     PublishTelemetry();
@@ -267,9 +275,9 @@ namespace VirtualSteerReceiver.Services
 
         private void OnWatchdogTick(object? state)
         {
-            if (_isConnected && _lastPacketTime.HasValue)
+            if (_isConnected && _lastPacketTicks.HasValue)
             {
-                double msSinceLastPacket = (DateTime.UtcNow - _lastPacketTime.Value).TotalMilliseconds;
+                double msSinceLastPacket = (double)(Stopwatch.GetTimestamp() - _lastPacketTicks.Value) * 1000 / Stopwatch.Frequency;
                 if (msSinceLastPacket > 500)
                 {
                     _isConnected = false;
@@ -307,7 +315,9 @@ namespace VirtualSteerReceiver.Services
                 PacketLossCount = _packetLossCount,
                 InvalidPacketsCount = _invalidPacketsCount,
                 CrcFailuresCount = _crcFailuresCount,
-                LastPacketTime = _lastPacketTime,
+                LastPacketTime = _lastPacketTicks.HasValue 
+                    ? DateTime.UtcNow - TimeSpan.FromMilliseconds((double)(Stopwatch.GetTimestamp() - _lastPacketTicks.Value) * 1000 / Stopwatch.Frequency) 
+                    : null,
                 SourceIp = _sourceIp,
 
                 CurrentPingMs = Math.Round(_currentPingMs, 1),

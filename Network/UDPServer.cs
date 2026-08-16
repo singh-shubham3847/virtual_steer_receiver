@@ -6,6 +6,8 @@ using VirtualSteerReceiver.Utils;
 
 namespace VirtualSteerReceiver.Network
 {
+    public delegate void PacketReceivedHandler(ReadOnlySpan<byte> buffer, IPEndPoint sender);
+
     /// <summary>
     /// High-performance, low-latency UDP server that receives raw packets on a specified port.
     /// Uses a dedicated, high-priority background thread with synchronous blocking socket reads
@@ -17,7 +19,7 @@ namespace VirtualSteerReceiver.Network
         private Thread? _listenThread;
         private volatile bool _isListening;
 
-        public event Action<byte[], IPEndPoint>? PacketReceived;
+        public event PacketReceivedHandler? PacketReceived;
         public event Action<Exception>? ErrorOccurred;
 
         public bool IsListening => _isListening;
@@ -72,11 +74,8 @@ namespace VirtualSteerReceiver.Network
                     int bytesRead = _socket.ReceiveFrom(receiveBuffer, ref remoteEP);
                     if (bytesRead > 0)
                     {
-                        // Copy to separate array for callback to allow immediate buffer reuse
-                        byte[] data = new byte[bytesRead];
-                        Buffer.BlockCopy(receiveBuffer, 0, data, 0, bytesRead);
-
-                        PacketReceived?.Invoke(data, (IPEndPoint)remoteEP);
+                        ReadOnlySpan<byte> dataSpan = new ReadOnlySpan<byte>(receiveBuffer, 0, bytesRead);
+                        PacketReceived?.Invoke(dataSpan, (IPEndPoint)remoteEP);
                     }
                 }
                 catch (SocketException ex) when (ex.SocketErrorCode == SocketError.ConnectionReset || ex.SocketErrorCode == SocketError.Interrupted)
@@ -93,6 +92,8 @@ namespace VirtualSteerReceiver.Network
                     if (_isListening)
                     {
                         ErrorOccurred?.Invoke(ex);
+                        // Sleep briefly to prevent hot loop if socket is in a persistent broken state
+                        Thread.Sleep(10);
                     }
                 }
             }
