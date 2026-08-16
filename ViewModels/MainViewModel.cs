@@ -35,6 +35,7 @@ namespace VirtualSteerReceiver.ViewModels
         private long _crcFailures;
         private string _sourceIp = "Disconnected";
         private string _lastPacketTimeText = "N/A";
+        private long _lastUiUpdateTimeMs;
 
         // Advanced Network Stats
         private double _currentPingMs;
@@ -493,6 +494,13 @@ namespace VirtualSteerReceiver.ViewModels
 
         private void OnControllerStateUpdated(ControllerState state)
         {
+            long nowMs = Environment.TickCount64;
+            if (nowMs - _lastUiUpdateTimeMs < 16) // Throttle UI refreshes to ~60 FPS to prevent WPF Dispatcher queue saturation at 1000Hz
+            {
+                return;
+            }
+            _lastUiUpdateTimeMs = nowMs;
+
             DispatchUI(() =>
             {
                 Steering = state.Steering;

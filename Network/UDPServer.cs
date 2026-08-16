@@ -2,21 +2,20 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.Threading.Tasks;
 using VirtualSteerReceiver.Utils;
 
 namespace VirtualSteerReceiver.Network
 {
     /// <summary>
-    /// Low-level UDP server that receives raw packets on a specified port.
-    /// Designed for high-frequency packet reception (100+ Hz).
+    /// High-performance, low-latency UDP server that receives raw packets on a specified port.
+    /// Uses a dedicated, high-priority background thread with synchronous blocking socket reads
+    /// and pre-allocated buffers to minimize GC allocations, task overhead, and latency.
     /// </summary>
     public sealed class UDPServer : IDisposable
     {
-        private UdpClient? _udpClient;
-        private CancellationTokenSource? _cts;
-        private Task? _listenTask;
-        private bool _isListening;
+        private Socket? _socket;
+        private Thread? _listenThread;
+        private volatile bool _isListening;
 
         public event Action<byte[], IPEndPoint>? PacketReceived;
         public event Action<Exception>? ErrorOccurred;
@@ -32,13 +31,13 @@ namespace VirtualSteerReceiver.Network
 
             try
             {
-                _udpClient = new UdpClient(AddressFamily.InterNetwork);
-                _udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
                 
                 // Increase receive buffer to handle bursts (256KB)
-                _udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveBuffer, 262144);
+                _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveBuffer, 262144);
                 
-                _udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, port));
+                _socket.Bind(new IPEndPoint(IPAddress.Any, port));
             }
             catch (SocketException ex) when (ex.SocketErrorCode == SocketError.AddressAlreadyInUse)
             {
@@ -51,37 +50,50 @@ namespace VirtualSteerReceiver.Network
                 throw;
             }
 
-            _cts = new CancellationTokenSource();
             _isListening = true;
-
-            _listenTask = Task.Run(() => ListenAsync(_cts.Token), _cts.Token);
+            _listenThread = new Thread(ListenLoop)
+            {
+                IsBackground = true,
+                Name = "UDPServerListenThread",
+                Priority = ThreadPriority.Highest // Highest priority to minimize kernel-to-user thread scheduling latency
+            };
+            _listenThread.Start();
         }
 
-        private async Task ListenAsync(CancellationToken token)
+        private void ListenLoop()
         {
-            while (!token.IsCancellationRequested && _udpClient != null)
+            byte[] receiveBuffer = new byte[2048];
+            EndPoint remoteEP = new IPEndPoint(IPAddress.Any, 0);
+
+            while (_isListening && _socket != null)
             {
                 try
                 {
-                    UdpReceiveResult result = await _udpClient.ReceiveAsync(token);
-                    PacketReceived?.Invoke(result.Buffer, result.RemoteEndPoint);
+                    int bytesRead = _socket.ReceiveFrom(receiveBuffer, ref remoteEP);
+                    if (bytesRead > 0)
+                    {
+                        // Copy to separate array for callback to allow immediate buffer reuse
+                        byte[] data = new byte[bytesRead];
+                        Buffer.BlockCopy(receiveBuffer, 0, data, 0, bytesRead);
+
+                        PacketReceived?.Invoke(data, (IPEndPoint)remoteEP);
+                    }
                 }
-                catch (OperationCanceledException)
+                catch (SocketException ex) when (ex.SocketErrorCode == SocketError.ConnectionReset || ex.SocketErrorCode == SocketError.Interrupted)
                 {
-                    break; // Stopped gracefully
+                    // ICMP port unreachable or socket interrupted (closed) — harmless, ignore
+                    continue;
                 }
                 catch (ObjectDisposedException)
                 {
                     break;
                 }
-                catch (SocketException ex) when (ex.SocketErrorCode == SocketError.ConnectionReset)
-                {
-                    // ICMP port unreachable from a previous send — harmless, ignore
-                    continue;
-                }
                 catch (Exception ex)
                 {
-                    ErrorOccurred?.Invoke(ex);
+                    if (_isListening)
+                    {
+                        ErrorOccurred?.Invoke(ex);
+                    }
                 }
             }
             _isListening = false;
@@ -92,16 +104,24 @@ namespace VirtualSteerReceiver.Network
             if (!_isListening) return;
 
             _isListening = false;
-            _cts?.Cancel();
-            _udpClient?.Close();
-            _udpClient?.Dispose();
-            _udpClient = null;
+            
+            try
+            {
+                _socket?.Close();
+                _socket?.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"Error closing UDP socket: {ex.Message}");
+            }
+            
+            _socket = null;
+            _listenThread = null;
         }
 
         public void Dispose()
         {
             Stop();
-            _cts?.Dispose();
         }
     }
 }
