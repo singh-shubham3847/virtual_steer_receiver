@@ -49,8 +49,8 @@ namespace VirtualSteerReceiver.Network
                 return new ParseResult(ParseStatus.InvalidVersion);
             }
 
-            ushort expectedCrc = BitConverter.ToUInt16(buffer.Slice(22, 2));
-            ushort computedCrc = Protocol.CalculateCrc16(buffer.Slice(0, 22));
+            ushort expectedCrc = BitConverter.ToUInt16(buffer.Slice(30, 2));
+            ushort computedCrc = Protocol.CalculateCrc16(buffer.Slice(0, 30));
 
             if (expectedCrc != computedCrc)
             {
@@ -63,6 +63,8 @@ namespace VirtualSteerReceiver.Network
             float brake = BitConverter.ToSingle(buffer.Slice(12, 4));
             float clutch = BitConverter.ToSingle(buffer.Slice(16, 4));
             ushort buttonsRaw = BitConverter.ToUInt16(buffer.Slice(20, 2));
+            float lookX = BitConverter.ToSingle(buffer.Slice(22, 4));
+            float lookY = BitConverter.ToSingle(buffer.Slice(26, 4));
 
             var buttons = (Protocol.ButtonFlags)buttonsRaw;
 
@@ -87,6 +89,8 @@ namespace VirtualSteerReceiver.Network
                 LB = buttons.HasFlag(Protocol.ButtonFlags.LB),
                 RB = buttons.HasFlag(Protocol.ButtonFlags.RB),
                 Back = buttons.HasFlag(Protocol.ButtonFlags.Back),
+                LookX = Math.Clamp(lookX, -1.0f, 1.0f),
+                LookY = Math.Clamp(lookY, -1.0f, 1.0f),
                 Timestamp = DateTime.UtcNow
             };
 

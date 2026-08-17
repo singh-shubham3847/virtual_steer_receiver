@@ -95,11 +95,15 @@ namespace VirtualSteerReceiver.Services
                 short steeringAxis = ScaleAxis(state.Steering);
                 byte throttleTrigger = ScaleTrigger(state.Throttle);
                 byte brakeTrigger = ScaleTrigger(state.Brake);
+                short lookAxisX = ScaleAxis(state.LookX);
+                short lookAxisY = ScaleAxis(state.LookY);
 
                 _controller.SetAxisValue(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Axis.LeftThumbX, steeringAxis);
                 _controller.SetAxisValue(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Axis.LeftThumbY, (short)0);
                 _controller.SetSliderValue(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Slider.RightTrigger, throttleTrigger);
                 _controller.SetSliderValue(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Slider.LeftTrigger, brakeTrigger);
+                _controller.SetAxisValue(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Axis.RightThumbX, lookAxisX);
+                _controller.SetAxisValue(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Axis.RightThumbY, lookAxisY);
 
                 _controller.SetButtonState(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.X, state.Handbrake);
                 _controller.SetButtonState(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.A, state.GearUp);

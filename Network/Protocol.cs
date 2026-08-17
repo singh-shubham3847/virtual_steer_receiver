@@ -4,7 +4,7 @@ namespace VirtualSteerReceiver.Network
 {
     public static class Protocol
     {
-        public const int PACKET_SIZE = 24;
+        public const int PACKET_SIZE = 32;
         public const byte HEADER = 0x56; // 'V'
         public const byte VERSION = 0x01; // Version 1
         public const int ControllerPort = 4444;

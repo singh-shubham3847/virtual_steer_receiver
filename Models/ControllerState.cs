@@ -26,6 +26,8 @@ namespace VirtualSteerReceiver.Models
         public bool LB { get; init; }
         public bool RB { get; init; }
         public bool Back { get; init; }
+        public float LookX { get; init; }
+        public float LookY { get; init; }
         public ushort SequenceNumber { get; init; }
         public DateTime Timestamp { get; init; }
 
