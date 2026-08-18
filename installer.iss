@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=Virtual Steer Companion
-AppVersion=1.0
+AppVersion=1.2
 AppPublisher=Virtual Steer
 DefaultDirName={pf}\Virtual Steer Companion
 DefaultGroupName=Virtual Steer Companion
